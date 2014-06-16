@@ -91,9 +91,8 @@ static int ca_check_values(ca_calc_t *calc, unsigned count)
  */
 static int ca_op_add(ca_calc_t *calc)
 {
-    if (ca_check_values(calc, 2)) {
+    if (ca_check_values(calc, 2))
         return -1;
-    }
 
     ca_value_t x = ca_first(calc);
     ca_value_t y = ca_second(calc);
@@ -114,9 +113,8 @@ static int ca_op_add(ca_calc_t *calc)
  */
 static int ca_op_substract(ca_calc_t *calc)
 {
-    if (ca_check_values(calc, 2)) {
+    if (ca_check_values(calc, 2))
         return -1;
-    }
 
     ca_value_t x = ca_first(calc);
     ca_value_t y = ca_second(calc);
