@@ -56,7 +56,7 @@ static void test_add(void)
     check_failure(ca_operate(&calc, CA_OP_ADD));
     ca_push(&calc, 4);
     check_success(ca_operate(&calc, CA_OP_ADD));
-    check(ca_top(&calc) == 6, "adding should replace the two top element by the addition of them");
+    check(ca_top(&calc) == 6, "adding should replace the two top elements by the addition of them");
     check(ca_space_left(&calc) == 1, "adding should increase space left");
     ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_ADD));
@@ -70,7 +70,7 @@ static void test_substract(void)
     check_failure(ca_operate(&calc, CA_OP_SUBSTRACT));
     ca_push(&calc, 4);
     check_success(ca_operate(&calc, CA_OP_SUBSTRACT));
-    check(ca_top(&calc) == -2, "substracting should replace the two top element by the substraction of them");
+    check(ca_top(&calc) == -2, "substracting should replace the two top elements by the substraction of them");
     check(ca_space_left(&calc) == 1, "substracting should increase space left");
     ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_SUBSTRACT));
@@ -85,7 +85,7 @@ static void test_multiply(void)
     check_failure(ca_operate(&calc, CA_OP_MULTIPLY));
     ca_push(&calc, 4);
     check_success(ca_operate(&calc, CA_OP_MULTIPLY));
-    check(ca_top(&calc) == 8, "multiplying should replace the two top element by the multiplication of them");
+    check(ca_top(&calc) == 8, "multiplying should replace the two top elements by the multiplication of them");
     check(ca_space_left(&calc) == 1, "multiplying should increase space left");
     ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_MULTIPLY));
@@ -114,7 +114,7 @@ static void test_square_root(void)
     check_failure(ca_operate(&calc, CA_OP_SQUARE_ROOT));
     ca_push(&calc, 49);
     check_success(ca_operate(&calc, CA_OP_SQUARE_ROOT));
-    check(ca_top(&calc) == 7, "square root should replace the two top element by the substraction of them");
+    check(ca_top(&calc) == 7, "square root should replace the top element by the square root of it");
     check(ca_space_left(&calc) == 0, "square root should not modify space left");
     ca_pop(&calc);
     ca_push(&calc, -1);
@@ -130,7 +130,7 @@ static void test_modulo(void)
     check_failure(ca_operate(&calc, CA_OP_MODULO));
     ca_push(&calc, 2);
     check_success(ca_operate(&calc, CA_OP_MODULO));
-    check(ca_top(&calc) == 1, "modulo should replace the two top element by the substraction of them");
+    check(ca_top(&calc) == 1, "modulo should replace the two top element by the modulo of them");
     check(ca_space_left(&calc) == 1, "modulo should increase space left");
     ca_push(&calc, 0);
     check_failure(ca_operate(&calc, CA_OP_MODULO));
