@@ -96,7 +96,7 @@ static void test_top(void)
     }
 }
 
-static void test_push(void)
+static void test_push_pop(void)
 {
     calc.size = 10;
     calc.top = 0;
@@ -109,18 +109,26 @@ static void test_push(void)
     check(calc.top == 2, "ca_push should increase top");
     check(stack[0] == 1, "ca_push should keep old values on the stack");
     check(stack[1] == 5, "ca_push should push value on the stack");
+
+    check(ca_pop(&calc) == 5, "ca_pop should pop top value from the stack");
+    check(calc.top == 1, "ca_pop should lower top");
+    check(stack[0] == 1, "ca_pop should keep old value on the stack");
+
+    check(ca_pop(&calc) == 1, "ca_pop should pop top value from the stack");
+    check(calc.top == 0, "ca_pop should lower top");
+
 }
 
-static void test_pop(void)
+static void test_remove(void)
 {
     calc.size = 100;
     calc.top = 50;
 
-    check(ca_pop(&calc, 13) == 13, "ca_pop should return the number of popped values");
-    check(calc.top == 37, "ca_pop should lower top");
+    check(ca_remove(&calc, 13) == 13, "ca_remove should return the number of popped values");
+    check(calc.top == 37, "ca_remove should lower top");
 
-    check(ca_pop(&calc, 0) == 37, "ca_pop should return the number of popped values");
-    check(calc.top == 0, "ca_pop should pop all values when using 0 as count");
+    check(ca_remove(&calc, 0) == 37, "ca_remove should return the number of popped values");
+    check(calc.top == 0, "ca_remove should pop all values when using 0 as count");
 }
 
 int main(void)
@@ -128,7 +136,7 @@ int main(void)
     test_initialize_cleanup();
     test_space_left();
     test_top();
-    test_push();
-    test_pop();
+    test_push_pop();
+    test_remove();
     return 0;
 }

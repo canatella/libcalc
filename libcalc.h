@@ -65,12 +65,23 @@ size_t ca_space_left(ca_calc_t *calc) __attribute__ ((nonnull(1)));
 void ca_push(ca_calc_t *calc, ca_value_t value) __attribute__ ((nonnull(1)));
 
 /**
+ * Pop a value from the stack.
+ *
+ * The user should make sure that there are enough element on the
+ * stack before calling this function.
+ *
+ * @param calc the library context
+ * @return the value popped from the stack
+ */
+ca_value_t ca_pop(ca_calc_t *calc) __attribute__ ((nonnull(1)));
+
+/**
  * Pop values from the stack
  *
  * @param count the number of values to pop, 0 for emptying the stack*
- * @return the number of value popped.
+ * @return the
  */
-unsigned ca_pop(ca_calc_t *calc, unsigned count) __attribute__ ((nonnull(1)));
+unsigned ca_remove(ca_calc_t *calc, unsigned count) __attribute__ ((nonnull(1)));
 
 /**
  * Look at the top of the stack

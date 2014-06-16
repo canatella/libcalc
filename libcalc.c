@@ -45,7 +45,7 @@ void ca_push(ca_calc_t *calc, ca_value_t value)
     calc->top += 1;
 }
 
-unsigned ca_pop(ca_calc_t *calc, unsigned count)
+unsigned ca_remove(ca_calc_t *calc, unsigned count)
 {
     assert_calc(calc);
 
@@ -54,4 +54,12 @@ unsigned ca_pop(ca_calc_t *calc, unsigned count)
 
     calc->top -= count;
     return count;
+}
+
+ca_value_t ca_pop(ca_calc_t *calc)
+{
+    assert_calc(calc);
+    assert(calc->top);
+    calc->top -= 1;
+    return calc->stack[calc->top];
 }
