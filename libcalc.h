@@ -9,6 +9,16 @@
 typedef long int ca_value_t;
 
 /**
+ * The maximum available value
+ */
+#define CA_VALUE_MAX LONG_MAX
+
+/**
+ * The minimum available value
+ */
+#define CA_VALUE_MIN LONG_MIN
+
+/**
  * The available operations.
  */
 typedef enum ca_operation {

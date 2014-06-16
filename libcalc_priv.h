@@ -28,14 +28,4 @@
  */
 #define assert_ca_operation(O) assert(CA_OPERATION_COUNT > (O))
 
-/**
- * The maximum available value
- */
-#define CA_VALUE_MAX LONG_MAX
-
-/**
- * The minimum available value
- */
-#define CA_VALUE_MIN LONG_MIN
-
 #endif /* _LIBCALC_PRIV_H_ */
