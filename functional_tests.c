@@ -60,6 +60,8 @@ static void test_add(void)
     check(ca_space_left(&calc) == 1, "adding should increase space left");
     ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_ADD));
+
+    ca_cleanup(&calc);
 }
 
 static void test_substract(void)
@@ -75,6 +77,8 @@ static void test_substract(void)
     ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_SUBSTRACT));
     ca_remove(&calc, 0);
+
+    ca_cleanup(&calc);
 }
 
 static void test_multiply(void)
@@ -90,6 +94,8 @@ static void test_multiply(void)
     ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_MULTIPLY));
     ca_remove(&calc, 0);
+
+    ca_cleanup(&calc);
 }
 
 static void test_divide(void)
@@ -105,6 +111,8 @@ static void test_divide(void)
     ca_push(&calc, 0);
     check_failure(ca_operate(&calc, CA_OP_DIVIDE));
     ca_remove(&calc, 0);
+
+    ca_cleanup(&calc);
 }
 
 static void test_square_root(void)
@@ -120,6 +128,8 @@ static void test_square_root(void)
     ca_push(&calc, -1);
     check_failure(ca_operate(&calc, CA_OP_SQUARE_ROOT));
     ca_remove(&calc, 0);
+
+    ca_cleanup(&calc);
 }
 
 static void test_modulo(void)
@@ -135,6 +145,8 @@ static void test_modulo(void)
     ca_push(&calc, 0);
     check_failure(ca_operate(&calc, CA_OP_MODULO));
     ca_remove(&calc, 0);
+
+    ca_cleanup(&calc);
 }
 
 static void test_left_shift(void)
@@ -147,6 +159,8 @@ static void test_left_shift(void)
     check_success(ca_operate(&calc, CA_OP_LEFT_SHIFT));
     check(ca_top(&calc) == 28, "left_shift should replace the two top element");
     check(ca_space_left(&calc) == 1, "left_shift should increase space left");
+
+    ca_cleanup(&calc);
 }
 
 static void test_right_shift(void)
@@ -159,7 +173,9 @@ static void test_right_shift(void)
     check_success(ca_operate(&calc, CA_OP_RIGHT_SHIFT));
     check(ca_top(&calc) == 1, "right_shift should replace the two top element");
     check(ca_space_left(&calc) == 1, "right_shift should increase space right");
-}
+
+    ca_cleanup(&calc);
+ }
 
 int main(void)
 {
