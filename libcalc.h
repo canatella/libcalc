@@ -70,12 +70,17 @@ void ca_push(ca_calc_t *calc, ca_value_t value) __attribute__ ((nonnull(1)));
  * @param count the number of values to pop, 0 for emptying the stack*
  * @return the number of value popped.
  */
-unsigned ca_pop(ca_calc_t *calc, unsigned count) __attribute__ ((nonnull(1)));;
+unsigned ca_pop(ca_calc_t *calc, unsigned count) __attribute__ ((nonnull(1)));
+
+/**
+ * Look at the top of the stack
+ */
+ca_value_t ca_top(ca_calc_t *calc) __attribute__ ((nonnull(1)));
 
 /**
  * Apply an operation to elements on the stack
  */
-int ca_operate(ca_calc_t *calc, ca_operation_t op) __attribute__ ((nonnull(1)));;
+int ca_operate(ca_calc_t *calc, ca_operation_t op) __attribute__ ((nonnull(1)));
 
 
 #endif /* _LIBCALC_H_ */

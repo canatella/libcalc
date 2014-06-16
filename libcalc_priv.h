@@ -12,6 +12,7 @@
  */
 #define assert_calc(C) do {                     \
     assert(C);                                  \
+    assert(C->stack);                           \
     assert(C->size);                            \
     assert(C->top <= C->size);                  \
     } while (0)

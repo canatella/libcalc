@@ -21,6 +21,14 @@ static unsigned calloc_count;
 static unsigned free_count;
 
 /**
+ * A context on which to do the tests
+ */
+ca_value_t stack[100] = { 0, };
+ca_calc_t calc = {
+    .stack = stack
+};
+
+/**
  * Mock calloc calls so we can make it fail and count them.
  */
 void *__real_calloc(size_t nmemb, size_t size);
@@ -71,14 +79,56 @@ static void test_initialize_cleanup(void)
 
 static void test_space_left(void)
 {
-    ca_calc_t calc;
     calc.size = 10;
     calc.top = 3;
     check(ca_space_left(&calc) == 7, "ca_space_left should compute free space");
 }
+
+static void test_top(void)
+{
+    calc.size = 10;
+    calc.top = 0;
+
+    for (size_t i = 0; i < 10; i++) {
+        stack[i] = i + 1;
+        calc.top = stack[i];
+        check(ca_top(&calc) == stack[i], "ca_top should return the value at the top of the stack");
+    }
+}
+
+static void test_push(void)
+{
+    calc.size = 10;
+    calc.top = 0;
+
+    ca_push(&calc, 1);
+    check(calc.top == 1, "ca_push should increase top");
+    check(stack[0] == 1, "ca_push should push value on the stack");
+
+    ca_push(&calc, 5);
+    check(calc.top == 2, "ca_push should increase top");
+    check(stack[0] == 1, "ca_push should keep old values on the stack");
+    check(stack[1] == 5, "ca_push should push value on the stack");
+}
+
+static void test_pop(void)
+{
+    calc.size = 100;
+    calc.top = 50;
+
+    check(ca_pop(&calc, 13) == 13, "ca_pop should return the number of popped values");
+    check(calc.top == 37, "ca_pop should lower top");
+
+    check(ca_pop(&calc, 0) == 37, "ca_pop should return the number of popped values");
+    check(calc.top == 0, "ca_pop should pop all values when using 0 as count");
+}
+
 int main(void)
 {
     test_initialize_cleanup();
     test_space_left();
+    test_top();
+    test_push();
+    test_pop();
     return 0;
 }
