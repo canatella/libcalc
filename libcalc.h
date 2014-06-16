@@ -58,6 +58,15 @@ int ca_initialize(ca_calc_t *calc, size_t size) __attribute__ ((nonnull(1)));
 void ca_cleanup(ca_calc_t *calc) __attribute__ ((nonnull(1)));
 
 /**
+ * Return the number of element on the stack
+ */
+ __attribute__ ((nonnull(1)))
+static inline size_t ca_count(ca_calc_t *calc)
+{
+    return calc->top;
+}
+
+/**
  * Return the space left of the stack
  *
  * @return the number of ca_value_t that can be pushed on the stack.
