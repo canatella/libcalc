@@ -14,7 +14,7 @@ functional_tests: functional_tests.o libcalc.so
 	$(CC) -o $(@) $(<) -L. -lcalc
 
 libcalc.o: libcalc.h libcalc_priv.h
-unit_tests.o: testsuite.h libcalc.h libcalc_priv.h
+unit_tests.o: testsuite.h libcalc.h libcalc_priv.h libcalc.c
 functional_tests.o: testsuite.h libcalc.h
 
 
