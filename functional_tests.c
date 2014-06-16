@@ -137,6 +137,30 @@ static void test_modulo(void)
     ca_remove(&calc, 0);
 }
 
+static void test_left_shift(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 7);
+    check_failure(ca_operate(&calc, CA_OP_LEFT_SHIFT));
+    ca_push(&calc, 2);
+    check_success(ca_operate(&calc, CA_OP_LEFT_SHIFT));
+    check(ca_top(&calc) == 28, "left_shift should replace the two top element");
+    check(ca_space_left(&calc) == 1, "left_shift should increase space left");
+}
+
+static void test_right_shift(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 7);
+    check_failure(ca_operate(&calc, CA_OP_RIGHT_SHIFT));
+    ca_push(&calc, 2);
+    check_success(ca_operate(&calc, CA_OP_RIGHT_SHIFT));
+    check(ca_top(&calc) == 1, "right_shift should replace the two top element");
+    check(ca_space_left(&calc) == 1, "right_shift should increase space right");
+}
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -147,5 +171,7 @@ int main(void)
     test_divide();
     test_square_root();
     test_modulo();
+    test_left_shift();
+    test_right_shift();
     return 0;
 }

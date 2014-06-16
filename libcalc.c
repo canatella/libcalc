@@ -232,13 +232,49 @@ static int ca_op_modulo(ca_calc_t *calc)
     return 0;
 }
 
+/**
+ * Shift bits to the left
+ */
+static int ca_op_left_shift(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2))
+        return -1;
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    ca_value_t result = x << y;
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
+/**
+ * Shift bits to the right
+ */
+static int ca_op_right_shift(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2))
+        return -1;
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    ca_value_t result = x >> y;
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
 static int (*operations[])(ca_calc_t *calc) = {
     ca_op_add,
     ca_op_substract,
     ca_op_multiply,
     ca_op_divide,
     ca_op_square_root,
-    ca_op_modulo
+    ca_op_modulo,
+    ca_op_left_shift,
+    ca_op_right_shift
 };
 
 int ca_operate(ca_calc_t *calc, ca_operation_t op)

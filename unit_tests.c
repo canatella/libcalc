@@ -378,6 +378,36 @@ static void test_op_modulo(void)
     check_failure(ca_op_modulo(&calc));
 }
 
+static void test_op_left_shift(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_left_shift(&calc));
+    calc.top = 1;
+    check_failure(ca_op_left_shift(&calc));
+
+    calc.stack[0] = 3;
+    calc.stack[1] = 2;
+    calc.top = 2;
+    check_success(ca_op_left_shift(&calc));
+    check(calc.top == 1, "left_shift should remove two values and add the result on the stack");
+    check(calc.stack[0] == 12, "left_shift should put the addition result on the stack");
+}
+
+static void test_op_right_shift(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_right_shift(&calc));
+    calc.top = 1;
+    check_failure(ca_op_right_shift(&calc));
+
+    calc.stack[0] = 12;
+    calc.stack[1] = 2;
+    calc.top = 2;
+    check_success(ca_op_right_shift(&calc));
+    check(calc.top == 1, "right_shift should remove two values and add the result on the stack");
+    check(calc.stack[0] == 3, "right_shift should put the addition result on the stack");
+}
+
 
 int main(void)
 {
@@ -393,5 +423,7 @@ int main(void)
     test_op_divide();
     test_op_square_root();
     test_op_modulo();
+    test_op_left_shift();
+    test_op_right_shift();
     return 0;
 }
