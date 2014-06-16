@@ -1,4 +1,4 @@
-CFLAGS := -Wall -Werror -g
+CFLAGS := -Wall -Werror -g --std=gnu99
 
 LIBCALC_OBJECTS = libcalc.o
 UNIT_OBJECTS = unit_tests.o
