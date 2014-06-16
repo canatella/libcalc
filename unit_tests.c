@@ -131,6 +131,127 @@ static void test_remove(void)
     check(calc.top == 0, "ca_remove should pop all values when using 0 as count");
 }
 
+static void test_check_values(void)
+{
+    calc.top = 3;
+    check_failure(ca_check_values(&calc, 4));
+    check_success(ca_check_values(&calc, 3));
+    check_success(ca_check_values(&calc, 2));
+    check_success(ca_check_values(&calc, 1));
+    check_success(ca_check_values(&calc, 0));
+}
+
+static void test_op_add(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_add(&calc));
+    calc.top = 1;
+    check_failure(ca_op_add(&calc));
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 23;
+    calc.top = 2;
+    check_success(ca_op_add(&calc));
+    check(calc.top == 1, "add should remove two values and add the result on the stack");
+    check(calc.stack[0] == 53, "add should put the addition result on the stack");
+
+    calc.stack[0] = 30;
+    calc.stack[1] = -23;
+    calc.top = 2;
+    check_success(ca_op_add(&calc));
+    check(calc.top == 1, "add should remove two values and add the result on the stack");
+    check(calc.stack[0] == 7, "add should put the addition result on the stack");
+
+    calc.stack[0] = -30;
+    calc.stack[1] = 23;
+    calc.top = 2;
+    check_success(ca_op_add(&calc));
+    check(calc.top == 1, "add should remove two values and add the result on the stack");
+    check(calc.stack[0] == -7, "add should put the addition result on the stack");
+
+    calc.stack[0] = -30;
+    calc.stack[1] = -23;
+    calc.top = 2;
+    check_success(ca_op_add(&calc));
+    check(calc.top == 1, "add should remove two values and add the result on the stack");
+    check(calc.stack[0] == -53, "add should put the addition result on the stack");
+
+    /* check for overflows */
+    calc.stack[0] = CA_VALUE_MAX;
+    calc.stack[1] = 1;
+    calc.top = 2;
+    check_failure(ca_op_add(&calc));
+
+    calc.stack[0] = CA_VALUE_MIN;
+    calc.stack[1] = -1;
+    calc.top = 2;
+    check_failure(ca_op_add(&calc));
+
+    calc.stack[0] = 1;
+    calc.stack[1] = CA_VALUE_MAX;
+    calc.top = 2;
+    check_failure(ca_op_add(&calc));
+
+    calc.stack[0] = -1;
+    calc.stack[1] = CA_VALUE_MIN;
+    calc.top = 2;
+    check_failure(ca_op_add(&calc));
+}
+
+static void test_op_substract(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_substract(&calc));
+    calc.top = 1;
+    check_failure(ca_op_substract(&calc));
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 23;
+    calc.top = 2;
+    check_success(ca_op_substract(&calc));
+    check(calc.top == 1, "add should remove two values and add the result on the stack");
+    check(calc.stack[0] == 7, "add should put the addition result on the stack");
+
+    calc.stack[0] = 30;
+    calc.stack[1] = -23;
+    calc.top = 2;
+    check_success(ca_op_substract(&calc));
+    check(calc.stack[0] == 53, "add should put the addition result on the stack");
+
+    calc.stack[0] = -30;
+    calc.stack[1] = 23;
+    calc.top = 2;
+    check_success(ca_op_substract(&calc));
+    check(calc.stack[0] == -53, "add should put the addition result on the stack");
+
+    calc.stack[0] = -30;
+    calc.stack[1] = -23;
+    calc.top = 2;
+    check_success(ca_op_substract(&calc));
+    check(calc.stack[0] == -7, "add should put the addition result on the stack");
+
+    /* check for overflows */
+    calc.stack[0] = CA_VALUE_MAX;
+    calc.stack[1] = -1;
+    calc.top = 2;
+    check_failure(ca_op_substract(&calc));
+
+    calc.stack[0] = CA_VALUE_MIN;
+    calc.stack[1] = 1;
+    calc.top = 2;
+    check_failure(ca_op_substract(&calc));
+
+    calc.stack[0] = -2;
+    calc.stack[1] = CA_VALUE_MAX;
+    calc.top = 2;
+    check_failure(ca_op_substract(&calc));
+
+    calc.stack[0] = 1;
+    calc.stack[1] = CA_VALUE_MIN;
+    calc.top = 2;
+    check_failure(ca_op_substract(&calc));
+}
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -138,5 +259,8 @@ int main(void)
     test_top();
     test_push_pop();
     test_remove();
+    test_check_values();
+    test_op_add();
+    test_op_substract();
     return 0;
 }

@@ -63,3 +63,83 @@ ca_value_t ca_pop(ca_calc_t *calc)
     calc->top -= 1;
     return calc->stack[calc->top];
 }
+
+/**
+ * Ensure that there are at least count values on the stack
+ */
+static int ca_check_values(ca_calc_t *calc, unsigned count)
+{
+    assert(calc);
+    if (calc->top < count) {
+        tr("stack should hold at least %u operand", count);
+        return -1;
+    }
+    return 0;
+}
+
+/**
+ * Return the first operand
+ */
+#define ca_first(C) (C->stack[C->top - 2])
+/**
+ * Return the second operand
+ */
+#define ca_second(C) ca_top(C)
+
+/**
+ * Add the two top values.
+ */
+static int ca_op_add(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2)) {
+        return -1;
+    }
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    if ((y > 0 && x > CA_VALUE_MAX - y) || (y < 0 && x < CA_VALUE_MIN - y)) {
+        tr("addition would overflow");
+        return -1;
+    }
+
+    ca_value_t result = ca_first(calc) + ca_second(calc);
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
+/**
+ * Substract the two top values.
+ */
+static int ca_op_substract(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2)) {
+        return -1;
+    }
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    if ((y > 0 && x < CA_VALUE_MIN + y) || (y < 0 && x > CA_VALUE_MAX + y)) {
+        tr("substraction would overflow");
+        return -1;
+    }
+
+    ca_value_t result = ca_first(calc) - ca_second(calc);
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
+static int (*operations[])(ca_calc_t *calc) = {
+    ca_op_add,
+    ca_op_substract
+};
+
+int ca_operate(ca_calc_t *calc, ca_operation_t op)
+{
+    assert(calc);
+    assert(operations[op]);
+    return operations[op](calc);
+}

@@ -1,3 +1,5 @@
+#include <limits.h>
+
 #include "libcalc.h"
 #include "testsuite.h"
 
@@ -45,9 +47,41 @@ static void test_push_top_pop_remove_and_space_left(void)
 
     ca_cleanup(&calc);
 }
+
+static void test_add(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 2);
+    check_failure(ca_operate(&calc, CA_OP_ADD));
+    ca_push(&calc, 4);
+    check_success(ca_operate(&calc, CA_OP_ADD));
+    check(ca_top(&calc) == 6, "adding should replace the two top element by the addition of them");
+    check(ca_space_left(&calc) == 1, "adding should increase space left");
+    ca_push(&calc, LONG_MAX);
+    check_failure(ca_operate(&calc, CA_OP_ADD));
+}
+
+static void test_substract(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 2);
+    check_failure(ca_operate(&calc, CA_OP_SUBSTRACT));
+    ca_push(&calc, 4);
+    check_success(ca_operate(&calc, CA_OP_SUBSTRACT));
+    check(ca_top(&calc) == -2, "substracting should replace the two top element by the substraction of them");
+    check(ca_space_left(&calc) == 1, "substracting should increase space left");
+    ca_push(&calc, LONG_MAX);
+    check_failure(ca_operate(&calc, CA_OP_SUBSTRACT));
+    ca_remove(&calc, 0);
+}
+
 int main(void)
 {
     test_initialize_cleanup();
     test_push_top_pop_remove_and_space_left();
+    test_add();
+    test_substract();
     return 0;
 }
