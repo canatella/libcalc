@@ -1,8 +1,7 @@
 CFLAGS := -Wall -Werror -g --std=gnu99
 
-LIBCALC_OBJECTS = libcalc.o
-UNIT_OBJECTS = unit_tests.o
-FUNCTIONAL_OBJECTS = functional_tests.o
+calculator: calculator.o libcalc.so
+	$(CC) -o $(@) $(<) -L. -lcalc
 
 libcalc.so: libcalc.o
 	$(CC) -shared -o libcalc.so $(<)
@@ -13,10 +12,11 @@ unit_tests: unit_tests.o
 functional_tests: functional_tests.o libcalc.so
 	$(CC) -o $(@) $(<) -L. -lcalc
 
+
 libcalc.o: libcalc.h libcalc_priv.h
 unit_tests.o: testsuite.h libcalc.h libcalc_priv.h libcalc.c
 functional_tests.o: testsuite.h libcalc.h
-
+calculator.o: libcalc.h
 
 %.o: %.c
 	$(CC) $(CFLAGS) -fPIC -c -o $(@) $(<)

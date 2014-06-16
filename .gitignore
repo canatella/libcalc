@@ -1,3 +1,4 @@
 *.o
 *.so
 *_tests
+/calculator
