@@ -92,6 +92,36 @@ static void test_multiply(void)
     ca_remove(&calc, 0);
 }
 
+static void test_divide(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 7);
+    check_failure(ca_operate(&calc, CA_OP_DIVIDE));
+    ca_push(&calc, 2);
+    check_success(ca_operate(&calc, CA_OP_DIVIDE));
+    check(ca_top(&calc) == 3, "dividing should replace the two top element by the substraction of them");
+    check(ca_space_left(&calc) == 1, "dividing should increase space left");
+    ca_push(&calc, 0);
+    check_failure(ca_operate(&calc, CA_OP_DIVIDE));
+    ca_remove(&calc, 0);
+}
+
+static void test_square_root(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 1));
+    check_failure(ca_operate(&calc, CA_OP_SQUARE_ROOT));
+    ca_push(&calc, 49);
+    check_success(ca_operate(&calc, CA_OP_SQUARE_ROOT));
+    check(ca_top(&calc) == 7, "square root should replace the two top element by the substraction of them");
+    check(ca_space_left(&calc) == 0, "square root should not modify space left");
+    ca_pop(&calc);
+    ca_push(&calc, -1);
+    check_failure(ca_operate(&calc, CA_OP_SQUARE_ROOT));
+    ca_remove(&calc, 0);
+}
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -99,5 +129,7 @@ int main(void)
     test_add();
     test_substract();
     test_multiply();
+    test_divide();
+    test_square_root();
     return 0;
 }

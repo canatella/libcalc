@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define check(EXPR, MSG) do {                                           \
+#define check(EXPR, MSG, ...) do {                                      \
         if (!(EXPR)) {                                                  \
-            fprintf(stderr, "assertion %s failed: %s, %s:%u\n", # EXPR, \
-                    MSG, __FILE__, __LINE__);                           \
+            fprintf(stderr, "assertion %s failed: " MSG  ", %s:%u\n", # EXPR, \
+                    ## __VA_ARGS__, __FILE__, __LINE__);                \
             abort();                                                    \
         } else {                                                        \
             fprintf(stderr, "assertion %s succeeded, %s:%u\n", # EXPR,  \

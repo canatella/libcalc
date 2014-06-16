@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "libcalc_priv.h"
 
@@ -153,10 +154,68 @@ static int ca_op_multiply(ca_calc_t *calc)
     return 0;
 }
 
+/**
+ * Divide the two top values.
+ */
+static int ca_op_divide(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2))
+        return -1;
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    if (y == 0) {
+        tr("cannot divide by 0");
+        return -1;
+    }
+
+    ca_value_t result = x / y;
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
+/**
+ * Calculate the square root of the top value.
+ */
+static int ca_op_square_root(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 1))
+        return -1;
+
+    ca_value_t x = ca_pop(calc);
+
+    if (x < 0) {
+        tr("complex numbers are not supported, cannot fetch square root of negative numbers");
+        return -1;
+    }
+
+    /* lets keep it simple, do a binary search */
+    ca_value_t min = 0, max = x;
+    ca_value_t middle = ((min + max) >> 1) + 1;
+
+    do {
+        ca_value_t d = x / middle;
+        if (middle == d)
+            break;
+        else if (middle > d)
+            max = middle;
+        else
+            min = middle;
+        middle = (min + max) >>  1;
+    } while (max - min > 1);
+
+    ca_push(calc, middle);
+    return 0;
+}
+
 static int (*operations[])(ca_calc_t *calc) = {
     ca_op_add,
     ca_op_substract,
-    ca_op_multiply
+    ca_op_multiply,
+    ca_op_divide,
+    ca_op_square_root
 };
 
 int ca_operate(ca_calc_t *calc, ca_operation_t op)

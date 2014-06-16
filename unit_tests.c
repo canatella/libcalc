@@ -306,6 +306,58 @@ static void test_op_multiply(void)
     check_failure(ca_op_multiply(&calc));
 }
 
+static void test_op_divide(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_divide(&calc));
+    calc.top = 1;
+    check_failure(ca_op_divide(&calc));
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 7;
+    calc.top = 2;
+    check_success(ca_op_divide(&calc));
+    check(calc.top == 1, "divide should remove two values and add the result on the stack");
+    check(calc.stack[0] == 4, "divide should put the addition result on the stack");
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 0;
+    calc.top = 2;
+    check_failure(ca_op_divide(&calc));
+}
+
+static void test_op_square_root(void)
+{
+    calc.top = 1;
+
+#define CHECK_SQRT(X, Y) do {                                           \
+        calc.stack[0] = X;                                              \
+        check_success(ca_op_square_root(&calc));                        \
+        check(calc.stack[0] == Y, "square root of %ld should be %ld", X, Y); \
+    } while (0)
+
+    CHECK_SQRT(0L, 0L);
+    CHECK_SQRT(1L, 1L);
+    CHECK_SQRT(2L, 1L);
+    CHECK_SQRT(3L, 1L);
+    CHECK_SQRT(4L, 2L);
+    CHECK_SQRT(5L, 2L);
+    CHECK_SQRT(6L, 2L);
+    CHECK_SQRT(7L, 2L);
+    CHECK_SQRT(8L, 2L);
+    CHECK_SQRT(9L, 3L);
+    CHECK_SQRT(63L, 7L);
+    CHECK_SQRT(64L, 8L);
+    CHECK_SQRT(65L, 8L);
+    CHECK_SQRT(65L, 8L);
+    CHECK_SQRT(1520288L, 1232L);
+    CHECK_SQRT(1520289L, 1233L);
+    CHECK_SQRT(1520290L, 1233L);
+
+    calc.stack[0] = -1;
+    check_failure(ca_op_square_root(&calc));
+}
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -317,5 +369,7 @@ int main(void)
     test_op_add();
     test_op_substract();
     test_op_multiply();
+    test_op_divide();
+    test_op_square_root();
     return 0;
 }

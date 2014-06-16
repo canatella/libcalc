@@ -25,6 +25,7 @@ typedef enum ca_operation {
     CA_OP_ADD,
     CA_OP_SUBSTRACT,
     CA_OP_MULTIPLY,
+    CA_OP_DIVIDE,
     CA_OP_SQUARE_ROOT,
     CA_OP_MODULO,
     CA_OP_LEFT_SHIFT,
