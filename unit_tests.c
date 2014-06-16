@@ -408,6 +408,21 @@ static void test_op_right_shift(void)
     check(calc.stack[0] == 3, "right_shift should put the addition result on the stack");
 }
 
+static void test_stack_for_each(void)
+{
+    calc.top = 3;
+    calc.stack[0] = 1;
+    calc.stack[1] = 2;
+    calc.stack[2] = 3;
+
+    ca_value_t i = 1L;
+    ca_value_t *v;
+    ca_stack_for_each(&calc, v) {
+        check(*v == i, "stack_for_each should iterate over each value");
+        i += 1;
+    }
+    check(v == calc.stack + 3, "stack_for_each should stop iteration at the top of the stack");
+}
 
 int main(void)
 {
@@ -425,5 +440,6 @@ int main(void)
     test_op_modulo();
     test_op_left_shift();
     test_op_right_shift();
+    test_stack_for_each();
     return 0;
 }

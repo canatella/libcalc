@@ -113,5 +113,12 @@ ca_value_t ca_top(ca_calc_t *calc) __attribute__ ((nonnull(1)));
  */
 int ca_operate(ca_calc_t *calc, ca_operation_t op) __attribute__ ((nonnull(1)));
 
+/**
+ * Iterate over each value of the stack
+ *
+ * @param calc the library context
+ * @param value a pointer to a ca_value_t
+ */
+#define ca_stack_for_each(calc, value) for (value = (calc)->stack; value < (calc)->stack + (calc)->top; value++)
 
 #endif /* _LIBCALC_H_ */
