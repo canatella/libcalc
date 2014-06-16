@@ -58,7 +58,7 @@ static void test_add(void)
     check_success(ca_operate(&calc, CA_OP_ADD));
     check(ca_top(&calc) == 6, "adding should replace the two top element by the addition of them");
     check(ca_space_left(&calc) == 1, "adding should increase space left");
-    ca_push(&calc, LONG_MAX);
+    ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_ADD));
 }
 
@@ -72,8 +72,23 @@ static void test_substract(void)
     check_success(ca_operate(&calc, CA_OP_SUBSTRACT));
     check(ca_top(&calc) == -2, "substracting should replace the two top element by the substraction of them");
     check(ca_space_left(&calc) == 1, "substracting should increase space left");
-    ca_push(&calc, LONG_MAX);
+    ca_push(&calc, CA_VALUE_MAX);
     check_failure(ca_operate(&calc, CA_OP_SUBSTRACT));
+    ca_remove(&calc, 0);
+}
+
+static void test_multiply(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 2);
+    check_failure(ca_operate(&calc, CA_OP_MULTIPLY));
+    ca_push(&calc, 4);
+    check_success(ca_operate(&calc, CA_OP_MULTIPLY));
+    check(ca_top(&calc) == 8, "multiplying should replace the two top element by the multiplication of them");
+    check(ca_space_left(&calc) == 1, "multiplying should increase space left");
+    ca_push(&calc, CA_VALUE_MAX);
+    check_failure(ca_operate(&calc, CA_OP_MULTIPLY));
     ca_remove(&calc, 0);
 }
 
@@ -83,5 +98,6 @@ int main(void)
     test_push_top_pop_remove_and_space_left();
     test_add();
     test_substract();
+    test_multiply();
     return 0;
 }

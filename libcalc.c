@@ -102,7 +102,7 @@ static int ca_op_add(ca_calc_t *calc)
         return -1;
     }
 
-    ca_value_t result = ca_first(calc) + ca_second(calc);
+    ca_value_t result = x + y;
     ca_remove(calc, 2);
     ca_push(calc, result);
     return 0;
@@ -124,7 +124,30 @@ static int ca_op_substract(ca_calc_t *calc)
         return -1;
     }
 
-    ca_value_t result = ca_first(calc) - ca_second(calc);
+    ca_value_t result = x - y;
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
+/**
+ * Multiply the two top values.
+ */
+static int ca_op_multiply(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2))
+        return -1;
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    if (y != 0 && ((((x > 0 && y > 0) || (x < 0 || y < 0)) && (y > 0 ? x > CA_VALUE_MAX / y : x < CA_VALUE_MAX / y)) ||
+                   (((x > 0 && y < 0) || (x < 0 || y > 0)) && (y > 0 ? x < CA_VALUE_MIN / y : x > CA_VALUE_MIN / y)))) {
+        tr("multiplication would overflow");
+        return -1;
+    }
+
+    ca_value_t result = x * y;
     ca_remove(calc, 2);
     ca_push(calc, result);
     return 0;
@@ -132,7 +155,8 @@ static int ca_op_substract(ca_calc_t *calc)
 
 static int (*operations[])(ca_calc_t *calc) = {
     ca_op_add,
-    ca_op_substract
+    ca_op_substract,
+    ca_op_multiply
 };
 
 int ca_operate(ca_calc_t *calc, ca_operation_t op)

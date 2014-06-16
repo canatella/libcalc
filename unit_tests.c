@@ -209,26 +209,26 @@ static void test_op_substract(void)
     calc.stack[1] = 23;
     calc.top = 2;
     check_success(ca_op_substract(&calc));
-    check(calc.top == 1, "add should remove two values and add the result on the stack");
-    check(calc.stack[0] == 7, "add should put the addition result on the stack");
+    check(calc.top == 1, "substract should remove two values and add the result on the stack");
+    check(calc.stack[0] == 7, "substract should put the addition result on the stack");
 
     calc.stack[0] = 30;
     calc.stack[1] = -23;
     calc.top = 2;
     check_success(ca_op_substract(&calc));
-    check(calc.stack[0] == 53, "add should put the addition result on the stack");
+    check(calc.stack[0] == 53, "substract should put the addition result on the stack");
 
     calc.stack[0] = -30;
     calc.stack[1] = 23;
     calc.top = 2;
     check_success(ca_op_substract(&calc));
-    check(calc.stack[0] == -53, "add should put the addition result on the stack");
+    check(calc.stack[0] == -53, "substract should put the addition result on the stack");
 
     calc.stack[0] = -30;
     calc.stack[1] = -23;
     calc.top = 2;
     check_success(ca_op_substract(&calc));
-    check(calc.stack[0] == -7, "add should put the addition result on the stack");
+    check(calc.stack[0] == -7, "substract should put the addition result on the stack");
 
     /* check for overflows */
     calc.stack[0] = CA_VALUE_MAX;
@@ -252,6 +252,60 @@ static void test_op_substract(void)
     check_failure(ca_op_substract(&calc));
 }
 
+static void test_op_multiply(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_multiply(&calc));
+    calc.top = 1;
+    check_failure(ca_op_multiply(&calc));
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 23;
+    calc.top = 2;
+    check_success(ca_op_multiply(&calc));
+    check(calc.top == 1, "multiply should remove two values and add the result on the stack");
+    check(calc.stack[0] == 690, "multiply should put the addition result on the stack");
+
+    calc.stack[0] = 30;
+    calc.stack[1] = -23;
+    calc.top = 2;
+    check_success(ca_op_multiply(&calc));
+    check(calc.stack[0] == -690, "multiply should put the addition result on the stack");
+
+    calc.stack[0] = -30;
+    calc.stack[1] = 23;
+    calc.top = 2;
+    check_success(ca_op_multiply(&calc));
+    check(calc.stack[0] == -690, "multiply should put the addition result on the stack");
+
+    calc.stack[0] = -30;
+    calc.stack[1] = -23;
+    calc.top = 2;
+    check_success(ca_op_multiply(&calc));
+    check(calc.stack[0] == 690, "multiply should put the addition result on the stack");
+
+    /* check for overflows */
+    calc.stack[0] = CA_VALUE_MAX / 2 + 1;
+    calc.stack[1] = 2;
+    calc.top = 2;
+    check_failure(ca_op_multiply(&calc));
+
+    calc.stack[0] = CA_VALUE_MIN / 2 - 1;
+    calc.stack[1] = -2;
+    calc.top = 2;
+    check_failure(ca_op_multiply(&calc));
+
+    calc.stack[0] = -2;
+    calc.stack[1] = CA_VALUE_MIN / 2 - 1;
+    calc.top = 2;
+    check_failure(ca_op_multiply(&calc));
+
+    calc.stack[0] = -2;
+    calc.stack[1] = 0 - (CA_VALUE_MAX / 2 + 1);
+    calc.top = 2;
+    check_failure(ca_op_multiply(&calc));
+}
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -262,5 +316,6 @@ int main(void)
     test_check_values();
     test_op_add();
     test_op_substract();
+    test_op_multiply();
     return 0;
 }
