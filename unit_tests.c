@@ -358,6 +358,27 @@ static void test_op_square_root(void)
     check_failure(ca_op_square_root(&calc));
 }
 
+static void test_op_modulo(void)
+{
+    calc.top = 0;
+    check_failure(ca_op_modulo(&calc));
+    calc.top = 1;
+    check_failure(ca_op_modulo(&calc));
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 7;
+    calc.top = 2;
+    check_success(ca_op_modulo(&calc));
+    check(calc.top == 1, "modulo should remove two values and add the result on the stack");
+    check(calc.stack[0] == 2, "modulo should put the addition result on the stack");
+
+    calc.stack[0] = 30;
+    calc.stack[1] = 0;
+    calc.top = 2;
+    check_failure(ca_op_modulo(&calc));
+}
+
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -371,5 +392,6 @@ int main(void)
     test_op_multiply();
     test_op_divide();
     test_op_square_root();
+    test_op_modulo();
     return 0;
 }

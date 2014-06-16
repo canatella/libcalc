@@ -122,6 +122,21 @@ static void test_square_root(void)
     ca_remove(&calc, 0);
 }
 
+static void test_modulo(void)
+{
+    ca_calc_t calc;
+    check_success(ca_initialize(&calc, 2));
+    ca_push(&calc, 7);
+    check_failure(ca_operate(&calc, CA_OP_MODULO));
+    ca_push(&calc, 2);
+    check_success(ca_operate(&calc, CA_OP_MODULO));
+    check(ca_top(&calc) == 1, "modulo should replace the two top element by the substraction of them");
+    check(ca_space_left(&calc) == 1, "modulo should increase space left");
+    ca_push(&calc, 0);
+    check_failure(ca_operate(&calc, CA_OP_MODULO));
+    ca_remove(&calc, 0);
+}
+
 int main(void)
 {
     test_initialize_cleanup();
@@ -131,5 +146,6 @@ int main(void)
     test_multiply();
     test_divide();
     test_square_root();
+    test_modulo();
     return 0;
 }

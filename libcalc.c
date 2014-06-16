@@ -210,12 +210,35 @@ static int ca_op_square_root(ca_calc_t *calc)
     return 0;
 }
 
+/**
+ * Calculate the modulo of the two top values.
+ */
+static int ca_op_modulo(ca_calc_t *calc)
+{
+    if (ca_check_values(calc, 2))
+        return -1;
+
+    ca_value_t x = ca_first(calc);
+    ca_value_t y = ca_second(calc);
+
+    if (y == 0) {
+        tr("cannot calculate modulo by 0");
+        return -1;
+    }
+
+    ca_value_t result = x % y;
+    ca_remove(calc, 2);
+    ca_push(calc, result);
+    return 0;
+}
+
 static int (*operations[])(ca_calc_t *calc) = {
     ca_op_add,
     ca_op_substract,
     ca_op_multiply,
     ca_op_divide,
-    ca_op_square_root
+    ca_op_square_root,
+    ca_op_modulo
 };
 
 int ca_operate(ca_calc_t *calc, ca_operation_t op)
