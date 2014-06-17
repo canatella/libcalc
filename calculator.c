@@ -92,7 +92,10 @@ int main(void)
             if (errno == ERANGE) {
                 fprintf(stderr, "integer is out of range.\n");
             } else if (*endptr == '\n') {
-                ca_push(&calc, value);
+                if (ca_space_left(&calc))
+                    ca_push(&calc, value);
+                else
+                    fprintf(stderr, "stack is full.\n");
             } else {
                 fprintf(stderr, "unable to parse command.\n");
             }
