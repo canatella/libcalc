@@ -279,7 +279,8 @@ static int (*operations[])(ca_calc_t *calc) = {
 
 int ca_operate(ca_calc_t *calc, ca_operation_t op)
 {
-    assert(calc);
+    assert_ca_operation(op);
+    assert_calc(calc);
     assert(operations[op]);
     return operations[op](calc);
 }

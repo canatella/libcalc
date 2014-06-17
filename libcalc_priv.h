@@ -26,6 +26,6 @@
 /**
  * Check that an operation is valid.
  */
-#define assert_ca_operation(O) assert(CA_OPERATION_COUNT > (O))
+#define assert_ca_operation(O) assert(CA_OPERATION_COUNT > (size_t) (O))
 
 #endif /* _LIBCALC_PRIV_H_ */
