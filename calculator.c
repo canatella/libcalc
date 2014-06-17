@@ -82,6 +82,9 @@ int main(void)
         else if (strcmp(line, "empty\n") == 0) {
             ca_remove(&calc, 0);
         }
+        else if (strcmp(line, "\n") == 0) {
+            /* do nothing here */
+        }
         else {
             char *endptr;
             errno = 0;
